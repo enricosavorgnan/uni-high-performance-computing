@@ -24,7 +24,7 @@ While the course progresses, there will also be **extended lecture notes**, elab
 
 
 ### Example codes
-For every main topic, there are **example codes** that illustrate its traits, as follows
+For every main topic, in the folder [`examples`](./examples) there are **example codes** that illustrate its traits, as follows
 
 | TOPICS                                         | sub-topics                                                   |
 | ---------------------------------------------- | ------------------------------------------------------------ |
