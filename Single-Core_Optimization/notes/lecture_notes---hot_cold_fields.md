@@ -100,7 +100,7 @@ versus 78 MB before; a ~30× reduction. The cold data — `alldata` — is still
 
 I used to gloss over this, but I think it is better to illustrate the point.
 
-If you benchmark the original layout (`key + data[100] + next`) against the reordered layout (`key + next + data[100]`), measuring wall-clock time on the pointer-chasing traversal, you will almost certainly see no significant difference. The struct-split version might show some improvement, but much less than a naive reading of "30× less memory traffic" would make you hope for.
+If you benchmark the original layout (`key + data[100] + next`) against the reordered layout (`key + next + data[100]`), measuring wall-clock time on the pointer-chasing traversal, you will almost certainly see no significant, or minor, difference. The struct-split version might show some improvement, but much less than a naive reading of "30× less memory traffic" would make you hope for.
 This is not measurement noise, and it does not mean the optimisation is wrong. It means the thing we have optimised is not the thing that dominates the runtime. Sad but true.
 
 What actually happens is the following: when the CPU is at node `p` and needs to evaluate `p->key != key` and then follow `p->next`, both addresses are available as soon as the pointer `p` is known. The out-of-order execution engine will dispatch **both loads simultaneously**; there is no reason to wait for `key` before issuing the request for `next`. The effective latency per traversal step is therefore:
@@ -176,8 +176,8 @@ Let’s state more clearly what happens:
 |---|---|---|---|
 | `pointer_chasing/hotcold_a` | yes | no | baseline |
 | `pointer_chasing/hotcold_b` | yes | marginal | ~2× fewer LLC misses; same serial latency per step |
-| `not_pointer_chasing/hotcold_a` | no | partial | prefetcher helps; but 77 MB still thrashes L3 |
-| `not_pointer_chasing/hotcold_b` | no | yes, clearly | 1.6 MB working set fits in L3; searches run from cache |
+| `not_pointer_chasing/hotcold_a` | no | partial | prefetcher helps; but large N does not fit in L3 |
+| `not_pointer_chasing/hotcold_b` | no | yes, clearly | reduced working set fits in L3 for larger N; searches run from cache |
 
 ---
 
