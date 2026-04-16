@@ -12,7 +12,7 @@
 int main ( int argc, char **argv)
 {
 
-  long long unsigned int M = 0;
+  long long unsigned int Nvalid = 0;
   int                    nthreads;
   
  #pragma omp parallel  
@@ -35,13 +35,13 @@ int main ( int argc, char **argv)
 	double x = erand48( myseeds ); 
 	double y = erand48( myseeds );
 	
-	M += ( (x*x + y*y) < 1.0 );
+	Nvalid += ( (x*x + y*y) < 1.0 );
       } 
   }    
     
   timing = omp_get_wtime() - timing;
   
   printf("Estimation of pi: %1.9f\n Walltime:%g\n",
-	 (4.0*(double)M)/N, timing );
+	 (4.0*(double)Nvalid)/N, timing );
   return 0;
 }
