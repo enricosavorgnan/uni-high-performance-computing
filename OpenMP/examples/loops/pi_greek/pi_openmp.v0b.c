@@ -38,18 +38,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 #include <omp.h>
-
-
-#define CPU_TIME_W ({ struct timespec ts; (clock_gettime( CLOCK_REALTIME, &ts ), \
-(double)ts.tv_sec + (double)ts.tv_nsec * 1e-9); })
-
-#define CPU_TIME_T ({ struct timespec myts; (clock_gettime( CLOCK_THREAD_CPUTIME_ID, &myts ), \
-(double)myts.tv_sec + (double)myts.tv_nsec * 1e-9); })
-
-#define CPU_TIME_P ({ struct timespec myts; (clock_gettime( CLOCK_PROCESS_CPUTIME_ID, &myts ), \
-(double)myts.tv_sec + (double)myts.tv_nsec * 1e-9); })
 
 #define DEFAULT 1000000
 
@@ -79,7 +68,6 @@ int main ( int argc, char **argv)
     seed48( myseeds );
     // ------------------------------------------
 
-    double mytime = CPU_TIME_T;
     for( long long unsigned int i = 0; i < N; i++)
       {
 	double x = erand48(myseeds); 
@@ -91,9 +79,7 @@ int main ( int argc, char **argv)
 	    M++;
 	  }
       }
-    mytime = CPU_TIME_T - mytime;
 
-    printf ( "\tthread %2d timing: %g\n", myid, mytime );
   }    
     
   timing = omp_get_wtime() - timing;
