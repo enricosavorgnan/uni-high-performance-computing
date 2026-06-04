@@ -41,11 +41,11 @@
 
 int main( int argc, char **argv )
 {
-  int i;
-
-  printf( "\nmain thread (pid: %d, tid: %ld) data:\n"
+	int i;
+	printf( "\nmain thread (pid: %d, tid: %ld) data:\n"
 	  "&i is @ address : %p\n\n",
 	  (int)getpid(), syscall(SYS_gettid), &i);
+	printf("Max threads: %d\n", omp_get_max_threads());
   
   // just try who is the private i for each thread
  #pragma omp parallel
